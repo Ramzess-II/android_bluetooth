@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Push scale</string>
+    <string name="titl_name">Пускові ваги</string>
+    <string name="to_main">На головну</string>
+    <string name="bt_list">BT_LIST</string>
+    <string name="push">Задати вагу відпускання</string>
+    <string name="zero">Виконати обнулення</string>
+    <string name="calib">Виконати калібровку</string>
+    <string name="push_auto">Зафіксувати вагу відпускання</string>
+    <string name="search">Знайдені прилади</string>
+    <string name="bt_off">Блютуз не ввімкнено</string>
+    <string name="search_print">Пошук приладів</string>
+    <string name="no_permission">Не має дозволу</string>
+    <string name="temp">Температура</string>
+    <string name="mass_push">Вага відпускання:</string>
+    <string name="mass_call">Вага калібровки:</string>
+    <string name="sawed">Збережено</string>
+
+</resources>
