@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -38,6 +39,7 @@ public class BtListActivity extends AppCompatActivity {
     private ListView listView;
     private BT_adapter adapter;
     private BluetoothAdapter btAdapter;   // просто создали объект блютуза
+
     List<List_item> list;                // это создание нового списка
 
     @Override
@@ -46,6 +48,7 @@ public class BtListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bt_list);
         init ();
         context = this;
+        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
     }
 
     @Override
@@ -168,9 +171,9 @@ public class BtListActivity extends AppCompatActivity {
     }
 
     private void getBtPermission() {       // проверяем разрешение на местоположение устройства
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
             // проверяем разрешение на локацию устройства, если нету то бросаем запрос на разрешение включить локализацию
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, BT_REQUEST_PERM);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_SCAN}, BT_REQUEST_PERM);
         } else {
             isBtPermission = true;    // а если есть разрешение то ок
         }

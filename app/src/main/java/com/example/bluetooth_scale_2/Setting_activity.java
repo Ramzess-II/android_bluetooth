@@ -42,8 +42,10 @@ public class Setting_activity extends AppCompatActivity {
         }
         if (item.getItemId() == R.id.save_setting) {
             SharedPreferences.Editor editor = pref.edit();                                          // создаем елемент для открытия таблицы на запись
-            editor.putString(Shared_pref.CALL_WEIGHT, edd_cal.getText().toString());                // сохраняем по ключу значение
-            editor.putString(Shared_pref.CALL_PUSH, edd_push.getText().toString());                 // сохраняем по ключу значение
+            int number_weight = Integer.parseInt(edd_cal.getText().toString());                     // это чтоб добавить в строку ведущие нули
+            int number_push = Integer.parseInt(edd_push.getText().toString());
+            editor.putString(Shared_pref.CALL_WEIGHT, String.format("%02d", number_weight));             // сохраняем по ключу значение
+            editor.putString(Shared_pref.CALL_PUSH, String.format("%02d", number_push));                 // сохраняем по ключу значение
             editor.apply();                                                                         // применить
             Toast.makeText(Setting_activity.this,R.string.sawed, Toast.LENGTH_SHORT).show();
             finish();

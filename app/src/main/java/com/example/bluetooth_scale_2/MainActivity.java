@@ -7,14 +7,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -40,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     private Button zero, auto_push, calib, push;
     private String push_string, call_string;
     private TextView display_massa, display_temp, display_overload, display_battery;
+    private BluetoothManager bluetoothManager;
+    private BluetoothAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
         btConnection = new BT_connect(this);                         // создаем класс BtConnection
         timer();
         read_sh ();
+        getBtPermission();
+        bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        adapter = bluetoothManager.getAdapter();
         enableBluetoothLauncher = registerForActivityResult(                // обработка ответов от пользователя
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -120,6 +130,28 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void getBtPermission() {       // проверяем разрешение на местоположение устройства
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            // проверяем разрешение на локацию устройства, если нету то бросаем запрос на разрешение включить локализацию
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 123);
+        } else {
+            //isBtPermission = true;    // а если есть разрешение то ок
+        }
+    }
+    @Override
+    // функция которая получает от системы разрешение или отказ в включении местоположения и тд.
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 123) {               // если вернулся код который запрашивали мы
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {         // проверяем ответило согласие или нет
+                //isBtPermission = true;                                        // подтверждаем
+            } else {
+                Toast.makeText(this, R.string.no_permission, Toast.LENGTH_LONG).show();   //или же пишем что не подтверждено
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);   // если это не наш запрос то просто ничего не делаем
+        }
     }
 
     private void showDialog(String message, DialogInterface.OnClickListener listener) {
